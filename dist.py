@@ -70,6 +70,7 @@ class Installer(object):
         if service_only == "restart":
             self.install_python_packages()
             self.init_django_project()
+            self.init_nginx()
             self.service_start()
         else:
             self.init_apt()
@@ -174,7 +175,7 @@ class Installer(object):
         ''')
 
     def init_crontab(self):
-        self.command_run('(crontab -u ubuntu -l; echo "0 4 1 */2 * /opt/letsencrypt/letsencrypt-auto certonly --nginx --force-renewal -m rotanev7@gmail.com -d hyuis.xyz -d www.hyuis.xyz" ) | crontab -u ubuntu -')
+        self.command_run('(crontab -u ubuntu -l; echo "0 4 1 */2 * sudo /opt/letsencrypt/letsencrypt-auto certonly --nginx --force-renewal -m rotanev7@gmail.com -d hyuis.xyz -d www.hyuis.xyz" ) | crontab -u ubuntu -')
 
     def command_run(self, command):
         if isinstance(command, (list, tuple)):
@@ -206,13 +207,13 @@ http {
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
     server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+        listen 80;
+        listen [::]:80;
         return 301 https://$host$request_uri;
     }
     server {
-        listen 443 ssl http2;
-        listen [::]:443 ssl http2;
+        listen 443;
+        listen [::]:443;
         server_name hyuis.xyz www.hyuis.xyz;
 
         ssl_certificate /etc/letsencrypt/live/hyuis.xyz/fullchain.pem;
