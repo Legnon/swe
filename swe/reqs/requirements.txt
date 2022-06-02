@@ -6,7 +6,7 @@ colorama==0.2.5
 command-not-found==0.3
 django-alexa==0.0.7
 djangorestframework==3.5.4
-html5lib==0.999
+html5lib==0.99999999
 language-selector==0.1
 psycopg2==2.6.2
 pycrypto==2.6.1
